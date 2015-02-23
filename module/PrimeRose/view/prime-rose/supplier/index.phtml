@@ -1,0 +1,100 @@
+<div class="jumbotron">
+    <h1><?php echo sprintf($this->translate('% %s'), '<span class="zf-green">', '</span>') ?></h1>
+
+</div>
+<?php 
+    // var_dump($suppliers);
+?>
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?php echo $this->translate('Supplier List') ?></h3>
+                <span style="float:right">
+                    <a href="<?php echo $this->url('primerose/supplier', array('action' => 'add')) ;?>">Add</a>
+                </span>
+            </div>
+            <div class="panel-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Supplier</th>
+                            <th colspan="7" style="text-align:center" >Address</th>
+                            <th rowspan="2">&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th>Address Line 1</th>
+                            <th>Address Line 2</th>
+                            <th>Town</th>
+                            <th>Postcode</th>
+                            <th>Telephone</th>
+                            <th>Fax</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<?php 
+    // var_dump($suppliers);    
+    // for all suppliers
+    foreach ($suppliers as $key => $supplier) { 
+        //get addresses 
+        $addresses = array_filter($supplier->getAddress());
+        if (is_array($addresses) && !empty($addresses))
+        {
+
+            $count = 0;
+            // print each address as it is
+            foreach ($addresses as $address) 
+            {
+?>
+                        <tr>
+                            <?php if ($count == 0) { ?>
+                            <td style="vertical-align:top;" 
+                                    rowspan="<?php echo count($addresses); ?>">
+                                <?php echo $supplier->getName(); ?>
+                            </td>
+                            <?php } ?>
+                            <td><?php echo $address->getLine1(); ?></td>
+                            <td><?php echo $address->getLine2(); ?></td>
+                            <td><?php echo $address->getTown(); ?></td>
+                            <td><?php echo $address->getPostcode(); ?></td>
+                            <td><?php echo $address->getTel(); ?></td>
+                            <td><?php echo $address->getFax(); ?></td>
+                            <td><?php echo $address->getEmail(); ?></td>
+                            <?php if ($count == 0) { ?>
+                            <td style="vertical-align:top;" 
+                                    rowspan="<?php echo count($addresses); ?>">
+                                 <a href="<?php echo $this->url('primerose/supplier', array('action' => 'delete', 'id' => $supplier->getId())) ;?>">Delete</a>
+                            </td>
+                            <?php } ?>
+                        </tr>
+<?php
+                $count++;
+            }
+        } 
+        else 
+        { // if not use colspan
+?>
+                        <tr>
+                            <td><?php echo $supplier->getName(); ?></td>
+                            <td colspan="7" style="background-color:grey;"></td>
+                            <td>
+                                 <a href="<?php echo $this->url('primerose/supplier', array('action' => 'delete', 'id' => $supplier->getId())) ;?>">Delete</a>
+                            </td>
+                        </tr>
+<?php
+        }
+
+?>
+<?php  } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
